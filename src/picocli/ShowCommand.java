@@ -1,12 +1,14 @@
-package com.picocli;
+package picocli;
+
+import com.cliNavigation;
+import com.Connector.DatabaseConnector;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@Command(name = "show", description = "Show all todo items sorted")
+@Command(name = "show", description = "Show an entity base on type")
 public class ShowCommand implements Runnable {
-
-    @Option(names = {"--sort-by", "-s"}, description = "Sort by field: [priority, dueDate, status]")
+   @Option(names = {"--sort-by", "-s"}, description = "Sort by field: [priority, dueDate, status]")
     String sortBy;
 
     @Option(names = {"--order", "-o"}, description = "Sort order: [asc, desc]", defaultValue = "asc")
@@ -14,6 +16,7 @@ public class ShowCommand implements Runnable {
 
     @Override
     public void run() {
+        DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector(); 
         System.out.printf("Showing todo items sorted by %s in %s order.%n", sortBy, order);
     }
 }

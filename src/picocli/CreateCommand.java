@@ -1,10 +1,13 @@
-package com.picocli;
+package picocli;
+
+import com.cliNavigation;
+import com.Connector.DatabaseConnector;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(name = "create", description = "Create a new user account or a new todo item")
+@Command(name = "create", description = "Create a new entity based on type")
 public class CreateCommand implements Runnable {
 
     @Parameters(index = "0", description = "Type of item to create: [user, todo]")
@@ -15,9 +18,10 @@ public class CreateCommand implements Runnable {
 
     @Option(names = "--title", description = "The title of the todo item to create")
     String todoTitle;
-
+    
     @Override
     public void run() {
+        DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector();
         if ("user".equalsIgnoreCase(type)) {
             if (userName != null) {
                 System.out.printf("Creating user account with name: %s%n", userName);

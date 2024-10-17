@@ -4,11 +4,35 @@ public class DatabaseConnector {
     private MariaDBConnector dbConn = new MariaDBConnector("wyrbill.de", 12089, "todo_app", "till", "123456");
     
     public DatabaseConnector(){
+        connect();
+    }
+
+    public void connect(){
         if(dbConn==null){
             System.out.println("Connection could not be established...");   
         } else {
             System.out.println("Connection has been established...");
         }
+    }
+    
+    public void disconnect(){
+        dbConn.close();
+    }
+
+    public void test(){
+        if(dbConn==null){
+            System.out.println("dbConn im Test ist null");   
+        } else {
+            System.out.println("dbConn im Test ist NICHT null");
+            dbConn.executeStatement("select Name from User");
+            QueryResult qr = dbConn.getCurrentQueryResult();
+            if(qr == null){
+                System.out.println("qr ist null du villager. Lern mal programmieren");
+                return;
+            }
+            System.out.println(qr.getData()[0][0]);
+        }
+        
     }
 
 
@@ -33,6 +57,10 @@ public class DatabaseConnector {
     public int findUserByName(String username){
         dbConn.executeStatement("select ID from User where Name = '"+ username +"'");
         QueryResult qr = dbConn.getCurrentQueryResult();
+        if(qr == null || qr.getRowCount() == 0){
+            System.out.println("The user: '" + username + "' was not found.");
+            return 0;
+        }
         return Integer.parseInt(qr.getData()[0][0]);
     }
     

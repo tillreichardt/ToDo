@@ -16,7 +16,7 @@ public class PasswordHasher {
             // convert byte-array to a hexdecimal string
             return bytesToHex(encodedHash);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Fehler beim Hashing des Passworts: " + e.getMessage());
+            throw new RuntimeException("Error while hashing password: " + e.getMessage());
         }
     }
 

@@ -1,10 +1,13 @@
-package com.picocli;
+package picocli;
+
+import com.cliNavigation;
+import com.Connector.DatabaseConnector;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@Command(name = "delete", description = "Delete a user account or a todo item")
+@Command(name = "delete", description = "Delete an entity based on type")
 public class DeleteCommand implements Runnable {
 
     @Parameters(index = "0", description = "Type of item to delete: [user, todo]")
@@ -18,6 +21,7 @@ public class DeleteCommand implements Runnable {
 
     @Override
     public void run() {
+        DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector();
         if ("user".equalsIgnoreCase(type)) {
             if (userName != null) {
                 System.out.printf("Deleting user account with name: %s%n", userName);

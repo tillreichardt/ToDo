@@ -1,6 +1,10 @@
-package com.picocli;
+/*
+ * old version of navigation system, I don't want to delete it tho lol
+ * new version: cliNavigation.java
+ */
 
-import com.PasswordHasher;
+package com;
+
 import com.Connector.DatabaseConnector;
 
 import java.util.Scanner;
