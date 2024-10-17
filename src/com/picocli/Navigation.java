@@ -1,13 +1,19 @@
-package com;
+package com.picocli;
 
+import com.PasswordHasher;
 import com.Connector.DatabaseConnector;
+
 import java.util.Scanner;
+
+
 public class Navigation {
 
     private int userID = 0;
     private boolean loggedin = false;
     private boolean continueLoop = true;
     private DatabaseConnector db = new DatabaseConnector();
+  
+
 
     public void navigationLoop(){
         Scanner scan = new Scanner(System.in);
@@ -181,4 +187,6 @@ public class Navigation {
         String joinedUsers = String.join("|",users);
         return "\\b(" + joinedUsers + ")\\b"; 
     }
+
+
 }
