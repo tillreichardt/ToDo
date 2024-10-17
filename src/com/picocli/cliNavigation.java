@@ -8,12 +8,20 @@ import picocli.CommandLine.Command;
         CreateCommand.class,
         UpdateCommand.class,
         DeleteCommand.class,
-        CommandLine.HelpCommand.class
+        CustomHelpCommand.class
 }, description = "Manage todo items")
 public class cliNavigation {
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new cliNavigation()).execute(args);
-        System.exit(exitCode);
+        CommandLine commandLine = new CommandLine(new cliNavigation());
+        // no arguments
+        if (args.length == 0) {
+            commandLine.usage(System.out);
+            new CustomHelpCommand().printShowCommandOptions();
+        } else {
+            // execute command
+            int exitCode = commandLine.execute(args);
+            System.exit(exitCode);
+        }
     }
 }
