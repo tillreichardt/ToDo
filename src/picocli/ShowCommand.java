@@ -10,13 +10,14 @@ import picocli.CommandLine.Option;
 public class ShowCommand implements Runnable {
    @Option(names = {"--sort-by", "-s"}, description = "Sort by field: [priority, dueDate, status]")
     String sortBy;
-
+    
     @Option(names = {"--order", "-o"}, description = "Sort order: [asc, desc]", defaultValue = "asc")
     String order;
 
+    DatabaseConnector db = cliNavigation.getDatabaseConnector(); 
+    
     @Override
     public void run() {
-        DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector(); 
         System.out.printf("Showing todo items sorted by %s in %s order.%n", sortBy, order);
     }
 }

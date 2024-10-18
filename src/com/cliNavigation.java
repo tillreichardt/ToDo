@@ -8,7 +8,7 @@ import picocli.CommandLine.Command;
 @Command(
     name = "todo", 
     description = "ToDo management app",
-    descriptionHeading = "\nType of items available for all commands: [user, todo, category]\n\n",  // Typen hier definieren
+    descriptionHeading = "\nType of items available for all commands: [user, todo, category]\n\n",
     customSynopsis = "todo [COMMAND] [TYPE] [OPTIONS]",
     subcommands = {
         picocli.ShowCommand.class, 
@@ -25,7 +25,9 @@ public class cliNavigation {
     private static int userID;
 
     public cliNavigation(){
-        //dbConn = new DatabaseConnector();
+        
+        dbConn = new DatabaseConnector();
+        dbConn.test();
         userID = 0;
     }
 
@@ -47,8 +49,6 @@ public class cliNavigation {
         if (args.length == 0) {
             commandLine.usage(System.out);
             new picocli.CustomHelpCommand().printShowCommandOptions();
-            
-
         } else {    
             // execute command
             int exitCode = commandLine.execute(args);

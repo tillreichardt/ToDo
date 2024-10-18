@@ -15,9 +15,11 @@ public class CustomHelpCommand implements Runnable {
     @CommandLine.Spec
     CommandSpec spec; // injected by picocli
     
+    DatabaseConnector db = cliNavigation.getDatabaseConnector();
+
     @Override
     public void run() {
-        DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector();
+        
         // help page for every command 
         CommandLine cmd = new CommandLine(spec.parent());
         cmd.usage(System.out);

@@ -1,5 +1,7 @@
 package picocli;
 
+import com.PasswordHasher;
+import com.cliNavigation;
 import com.Connector.DatabaseConnector;
 
 import picocli.CommandLine.Command;
@@ -13,34 +15,34 @@ public class LoginCommand implements Runnable {
     @Option(names = {"--password", "-p"}, description = "Enter password of your account")
     String password;
 
-    
+    DatabaseConnector db = cliNavigation.getDatabaseConnector();
 
     @Override
     public void run() {
-        /*if(checkLogin(password, username)){
-            System.out.println("Login was successful...");
+        if(checkLogin(password, username)){
+            System.out.println("Login was successful!");
         } else {
-            System.out.println("Login unsuccessful. Please try again...");
-        }*/
-        DatabaseConnector db = new DatabaseConnector(); 
-        System.out.println("username: "+ username);
-        System.out.println("password: "+ password);
-        db.connect();
-        db.test();
+            System.out.println("Login was unsuccessful. Please try again!");
+        }
     }
 
-    /*
+    
     private boolean checkLogin(String password, String username){
-        
-        if(db.findUserByName(username)==0){
-            //user not found
+        PasswordHasher ph = new PasswordHasher();
+        String hashedPassword = ph.hashPassword(password);
+        int userID = db.findUserByName(username);
+
+        if(userID==0){
+            System.out.println("A user '"+username+"' was not found!");
             return false;
         }
-        if(!(db.getPassword(db.findUserByName(username)).equals(password))){
-            // wrong password
+        if(!(db.getPassword(userID).equals(hashedPassword))){
+            System.out.println("Wrong password!");
             return false;
         }
+        // login successful
+        cliNavigation.setUserID(userID);
         return true;
     }
-    */
+    
 }
