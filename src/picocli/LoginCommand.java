@@ -7,6 +7,11 @@ import com.Connector.DatabaseConnector;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.util.Scanner;
+
+// checken ob UserID in Session= 0 ist, dann log out, sonst ist jemand eingeloggt. 
+// Beim ausloggen auf 0 setzen, beim einloggen auf aktuelle Userid
+
 @Command(name = "login", description = "Log in to your account")
 public class LoginCommand implements Runnable {
     @Option(names = {"--username", "-u"}, description = "Enter username of your account")
@@ -19,8 +24,18 @@ public class LoginCommand implements Runnable {
 
     @Override
     public void run() {
+        Scanner scanner = new Scanner(System.in);
+        if(username==null){
+            System.out.print("Please enter your username: ");
+            username = scanner.nextLine();
+        }
+        if(password==null){
+            System.out.print("Please enter your password: ");
+            password = scanner.nextLine();
+        }
         if(checkLogin(password, username)){
             System.out.println("Login was successful!");
+            db.updateSessionID(db.findUserByName(username));
         } else {
             System.out.println("Login was unsuccessful. Please try again!");
         }
@@ -40,8 +55,6 @@ public class LoginCommand implements Runnable {
             System.out.println("Wrong password!");
             return false;
         }
-        // login successful
-        cliNavigation.setUserID(userID);
         return true;
     }
     
