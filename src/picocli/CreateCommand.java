@@ -8,6 +8,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.util.Scanner;
+
 @Command(name = "create", description = "Create a new entity based on type")
 public class CreateCommand implements Runnable {
 
@@ -17,7 +19,7 @@ public class CreateCommand implements Runnable {
     @Option(names = {"--username", "-u"}, description = "The name of the user to create")
     String username;
 
-    @Option(names = {"--password", "-p"}, description = "The password of the user to create")
+    @Option(names = {"--password", "-pa"}, description = "The password of the user to create")
     String password;
 
     @Option(names = {"--title", "-t"}, description = "The title of ToDo or category to create")
@@ -26,47 +28,61 @@ public class CreateCommand implements Runnable {
     @Option(names = {"--description", "-d"}, description = "Description of ToDo", defaultValue = "")
     String description;
 
-    @Option(names = {"--importance", "-i"}, description = "Importance of ToDo", defaultValue = "0")
-    String importance;
+    @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo", defaultValue = "0")
+    int priority;
 
-    @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "0")
+    @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "empty")
     String category;
-
-    
 
     DatabaseConnector db = cliNavigation.getDatabaseConnector();
 
     @Override
     public void run() {
         PasswordHasher ph = new PasswordHasher();
+        Scanner scanner = new Scanner(System.in);  // Verwende Scanner für alle Eingaben
 
-        switch(type){
+        switch(type) {
             case "user" -> {
                 if (username == null) {
-                    System.out.println("Error: Please specify a name for the user using --name or -n");
-                    return;   
+                    System.out.print("Please enter the username: ");
+                    username = scanner.nextLine();
                 }
-                if(db.findUserByName(username)!=0){
-                    System.out.println("Error: User with the username: '"+ username +"' already exists");
+
+                if (db.findUserByName(username) != 0) {
+                    System.out.println("Error: User with the username: '" + username + "' already exists");
+                    scanner.close();
                     return;
                 }
+
+                if (password == null) {
+                    System.out.print("Please enter the password: ");
+                    password = scanner.nextLine();
+                }
+
                 db.addUser(username, ph.hashPassword(password));
-                System.out.printf("Creating user account with name: %s%n", username);
+                System.out.printf("User '%s' has been successfully created.%n", username);
             }
             case "todo" -> {
                 if (title == null) {
-                    System.out.println("Error: Please specify a title for the todo using --title or -t");
-                    return;   
+                    System.out.print("Please enter the title for the ToDo: ");
+                    title = scanner.nextLine();
                 }
-                db.createToDo(description, title, Integer.parseInt(importance), Integer.parseInt(category), cliNavigation.getUserID());
+                db.createToDo(description, title, priority, db.findCategoryByDescription(category), db.getSessionID());
+                System.out.printf("ToDo '%s' has been successfully created.%n", title);
             }
             case "category" -> {
-                if (title != null) {
-                    System.out.printf("Creating category item with title: %s%n", title);
-                } else {
-                    System.err.println("Error: Please specify a title for the category using --title or -t");
+                if (title == null) {
+                    System.out.print("Please enter the title for the category: ");
+                    title = scanner.nextLine();
                 }
+                
+                db.createCategory(title);
+                System.out.printf("Category '%s' has been successfully created.%n", title);
+            }
+            default -> {
+                System.out.println("Unknown type: " + type);
             }
         }
+        scanner.close();
     }
 }
