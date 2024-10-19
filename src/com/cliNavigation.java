@@ -22,21 +22,12 @@ import picocli.CommandLine.Command;
 public class cliNavigation {
 
     private static DatabaseConnector dbConn;
-    private static int userID;
 
     public cliNavigation(){
         
         dbConn = new DatabaseConnector();
-        dbConn.test();
+        //dbConn.test();
         userID = 0;
-    }
-
-    public static void setUserID(int id){
-        userID = id; 
-    }
-
-    public static int getUserID(){
-        return userID; 
     }
     
     public static DatabaseConnector getDatabaseConnector(){
@@ -45,12 +36,11 @@ public class cliNavigation {
 
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new cliNavigation());
-        // no arguments -> print help command when programm is executed
+        //dbConn.updateSessionID(10);
         if (args.length == 0) {
             commandLine.usage(System.out);
             new picocli.CustomHelpCommand().printShowCommandOptions();
-        } else {    
-            // execute command
+        } else {
             int exitCode = commandLine.execute(args);
             System.exit(exitCode);
         }
