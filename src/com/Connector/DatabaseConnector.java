@@ -120,19 +120,22 @@ public class DatabaseConnector {
     }
 
 
-    public void test(){
+    public int getSessionID(){
         dbConn.executeStatement("select userID from Session");
         QueryResult qr = dbConn.getCurrentQueryResult();
-        System.out.println("userID in Session is: "+qr.getData()[0][0]);
+        return Integer.parseInt(qr.getData()[0][0]);
+    }
+
+    public void updateSessionID(int newUserID){
+        int oldUserID = getSessionID();
+        dbConn.executeStatement("update Session set userID = " + newUserID + " where userID = " + oldUserID);
     }
 
 
-
-
     // -------- CRUD ToDo -------- 
-    public void createToDo(String description, String title, int important, int categoryID, int ownerID){
-        dbConn.executeStatement("Insert into ToDo (Description, Title, Date, Important, CategoryID, OwnerID)"+
-        "Values ('" + description + "','" + title +"',NOW()," + important + "," + categoryID + "," + ownerID +")");
+    public void createToDo(String description, String title, int priority, int categoryID, int ownerID){
+        dbConn.executeStatement("Insert into ToDo (Description, Title, Date, Priority, CategoryID, OwnerID)"+
+        "Values ('" + description + "','" + title +"',NOW()," + priority + "," + categoryID + "," + ownerID +")");
         setSharedConnection(ownerID, findToDoByTitle(title));
     }
 
