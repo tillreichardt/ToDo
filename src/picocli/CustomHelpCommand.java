@@ -29,24 +29,19 @@ public class CustomHelpCommand implements Runnable {
     }
     
     public void printShowCommandOptions() {
-        System.out.println();
-    
-        // Erstelle CommandLine-Objekte für die Befehle
         CommandLine showCmd = new CommandLine(new ShowCommand());
         CommandLine createCmd = new CommandLine(new CreateCommand());
-        CommandLine deleteCmd = new CommandLine(new DeleteCommand());
-    
-        // Ausgabe der Optionen für ShowCommand (sort options)
-        System.out.println("Sort options:");
-        printOptions(showCmd, "--sort-by", "--order");
-    
-        // Ausgabe der Optionen für CreateCommand
+        CommandLine deleteCmd = new CommandLine(new DeleteCommand());        
+        CommandLine updateCmd = new CommandLine(new DeleteCommand());     
+
+        System.out.println("\nSort options:");
+        printOptions(showCmd);
         System.out.println("\nCreateCommand options:");
         printOptions(createCmd);
-    
-        // Ausgabe der Optionen für DeleteCommand
         System.out.println("\nDeleteCommand options:");
         printOptions(deleteCmd);
+        System.out.println("\nUpdateCommand options:");
+        printOptions(updateCmd);
     }
     
     private void printOptions(CommandLine commandLine, String... optionNames) {

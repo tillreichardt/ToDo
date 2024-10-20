@@ -39,6 +39,7 @@ public class LoginCommand implements Runnable {
         } else {
             System.out.println("Login was unsuccessful. Please try again!");
         }
+        scanner.close();
     }
 
     

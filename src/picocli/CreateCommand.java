@@ -13,7 +13,7 @@ import java.util.Scanner;
 @Command(name = "create", description = "Create a new entity based on type")
 public class CreateCommand implements Runnable {
 
-    @Parameters(index = "0", description = "Type of item to create: [user, todo, category]")
+    @Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
 
     @Option(names = {"--username", "-u"}, description = "max. 32 character")
@@ -29,9 +29,9 @@ public class CreateCommand implements Runnable {
     String description;
 
     @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo: [0, 1]", defaultValue = "1")
-    int priority;
+    Integer priority;
 
-    @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "empty")
+    @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "default")
     String category;
 
     DatabaseConnector db = cliNavigation.getDatabaseConnector();
@@ -40,6 +40,10 @@ public class CreateCommand implements Runnable {
     public void run() {
         PasswordHasher ph = new PasswordHasher();
         Scanner scanner = new Scanner(System.in);
+
+        if (type.equals("")) {
+            type = cliNavigation.getInputWithValidation(scanner, "Please specify the type [user, todo, category]: ", "^(user|todo|category)$");
+        }
         switch(type) {
             case "user" -> {
                 if (username == null) {
@@ -47,7 +51,7 @@ public class CreateCommand implements Runnable {
                 }
 
                 if (db.findUserByName(username) != 0) {
-                    System.out.println("Error: User with the username: '" + username + "' already exists");
+                    System.out.println("User with the username: '" + username + "' already exists");
                     scanner.close();
                     return;
                 }

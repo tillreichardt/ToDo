@@ -16,9 +16,10 @@ public class UpdateCommand implements Runnable{
   	@Option(names = "--title", description = "New title for the todo item")
    	String title;
 
+	DatabaseConnector db = cliNavigation.getDatabaseConnector();
+
   	@Override
 	public void run() {
-		DatabaseConnector dbConnector = cliNavigation.getDatabaseConnector();
 		System.out.printf("Updating todo item %d with new title: %s%n", id, title);
 	}
 }

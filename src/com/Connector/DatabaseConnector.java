@@ -1,5 +1,9 @@
 package com.Connector;
 
+import java.util.Scanner;
+
+import com.cliNavigation;
+
 public class DatabaseConnector {
     private MariaDBConnector dbConn = new MariaDBConnector("wyrbill.de", 12089, "todo_app", "till", "123456");
     
@@ -26,12 +30,42 @@ public class DatabaseConnector {
         dbConn.executeStatement("Insert into User (Name, Password) Values ('"+ username +"','"+ password +"')");
     }
 
-    public void deleteUser(String username){
-        int id = findUserByName(username);
-        if(id==0) return; // --> User not found
-        dbConn.executeStatement("delete from User where id = " + id);
-    }
+    public void deleteUser(int userId) {
+        if (userId == 1){
+            System.out.println("Admin user cannot be deleted.");
+            return;
+        } 
+        // check if user has todos
+        dbConn.executeStatement("SELECT ID FROM ToDo WHERE OwnerID = " + userId);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        int toDoCount = qr.getRowCount();
+    
+        if (toDoCount > 0) {
+            Scanner scanner = new Scanner(System.in);
+            String response = cliNavigation.getInputWithValidation(scanner, 
+                String.format("User with ID '%d' has %d ToDo(s). Do you want to delete them? (yes/no): ", userId, toDoCount), 
+                "^(yes|no)$");
+            
+            if (response.equals("yes")) {
+                // delete all ToDos of user
+                for (int i = 0; i < toDoCount; i++) {
+                    int toDoId = Integer.parseInt(qr.getData()[i][0]);
+                    deleteToDo(toDoId);
+                }
+                System.out.printf("Deleted %d ToDo(s) linked to user with ID '%d'.%n", toDoCount, userId);
+            } else {
+                System.out.println("User deletion canceled.");
+                return;
+            }
+        }
 
+        dbConn.executeStatement("DELETE FROM User WHERE ID = " + userId);
+        System.out.printf("Deleted user with ID '%d'.%n", userId);
+    }
+    
+    
+    
+    
     //returns ID of a user
     public int findUserByName(String username){
         dbConn.executeStatement("select ID from User where Name = '"+ username +"'");
@@ -95,11 +129,40 @@ public class DatabaseConnector {
         dbConn.executeStatement("Insert into Category (Description) Values ('"+ categoryName +"')");
     }
 
-    public void deleteCategory(String description){
-        int id = findCategoryByDescription(description);
-        if(id==0 || id == 1) return; // --> Category not found
-        dbConn.executeStatement("delete from Category where id = " + id);
+    
+    public void deleteCategory(int categoryId) {
+        if (categoryId == 1){
+            System.out.println("You cannot delete the default category");
+            return; 
+        }
+        // check if category is used 
+        dbConn.executeStatement("SELECT ID FROM ToDo WHERE CategoryID = " + categoryId);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        int toDoCount = qr.getRowCount();
+    
+        if (toDoCount > 0) {
+            Scanner scanner = new Scanner(System.in);
+            String response = cliNavigation.getInputWithValidation(scanner, 
+                String.format("Category with ID '%d' is used by %d ToDo(s). Do you want to delete them? (yes/no): ", categoryId, toDoCount), 
+                "^(yes|no)$");
+    
+            if (response.equals("yes")) {
+                for (int i = 0; i < toDoCount; i++) {
+                    int toDoId = Integer.parseInt(qr.getData()[i][0]);
+                    deleteToDo(toDoId);
+                }
+                System.out.printf("Deleted %d ToDo(s) linked to category with ID '%d'.%n", toDoCount, categoryId);
+            } else {
+                System.out.println("Category deletion canceled.");
+                return;
+            }
+        }
+        
+        dbConn.executeStatement("DELETE FROM Category WHERE ID = " + categoryId);
+        System.out.printf("Deleted category with ID '%d'.%n", categoryId);
     }
+    
+    
 
     // returns ID of a category
     public int findCategoryByDescription(String description){
@@ -113,7 +176,6 @@ public class DatabaseConnector {
         dbConn.executeStatement("select ID from Category where ID = '"+ ID +"'");
         QueryResult qr = dbConn.getCurrentQueryResult();
         if(qr.getRowCount() == 0){
-            System.out.println("The category with ID: '" + ID + "' was not found.");
             return 0;
         } 
         return Integer.parseInt(qr.getData()[0][0]);
@@ -162,14 +224,27 @@ public class DatabaseConnector {
         setSharedConnection(ownerID, findToDoByTitle(title));
     }
 
-    public void deleteToDo(int toDoID){
-        if(findToDoByID(toDoID) == 0) return; // ToDo not found
-        dbConn.executeStatement("select OwnerID from ToDo where ID = " + toDoID);
+    public void deleteToDo(int toDoID) {
+        if (findToDoByID(toDoID) == 0) {
+            System.out.println("ToDo not found.");
+            return; // ToDo not found
+        }
+        
+        // find users with this todo 
+        dbConn.executeStatement("SELECT user_id FROM Shared_ToDo_Users WHERE todo_id = " + toDoID);
         QueryResult qr = dbConn.getCurrentQueryResult();
-        int ownerID = Integer.parseInt(qr.getData()[0][0]);
-        deleteSharedConnection(ownerID, toDoID);
-        dbConn.executeStatement("delete from ToDo where id = " + toDoID);
+        int sharedCount = qr.getRowCount();
+    
+        for (int i = 0; i < sharedCount; i++) {
+            int userId = Integer.parseInt(qr.getData()[i][0]);
+            deleteSharedConnection(userId, toDoID); 
+        }
+
+        // delete
+        dbConn.executeStatement("DELETE FROM ToDo WHERE ID = " + toDoID);
+        System.out.printf("Deleted ToDo with ID '%d'.%n", toDoID);
     }
+    
 
     // returns ID of a todo
     public int findToDoByTitle(String title){

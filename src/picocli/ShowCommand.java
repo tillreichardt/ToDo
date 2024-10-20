@@ -12,7 +12,7 @@ import java.util.Scanner;
 @Command(name = "show", description = "Show an entity base on type")
 public class ShowCommand implements Runnable {
 
-    @Parameters(index = "0", description = "Type of item to create: [user, todo, category]")
+    @Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
 
     @Option(names = {"--sort-by", "-s"}, description = "Sort by field: [priority, date]")
@@ -26,6 +26,9 @@ public class ShowCommand implements Runnable {
     @Override
     public void run() {
         Scanner scanner = new Scanner(System.in);
+        if (type.equals("")) {
+            type = cliNavigation.getInputWithValidation(scanner, "Please specify the type [user, todo, category]: ", "^(user|todo|category)$");
+        }
         switch(type){
             case "user" -> {
                 System.out.printf("Showing users...%n");
@@ -52,7 +55,7 @@ public class ShowCommand implements Runnable {
             }
 
             default -> {
-
+                System.out.println("Unknown type: " + type);
             }
         }
         scanner.close();
