@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 @Command(
     name = "todo", 
-    description = "ToDo management app",
     descriptionHeading = "\nType of items available for all commands: [user, todo, category]\n\n",
     customSynopsis = "todo [COMMAND] [TYPE] [OPTIONS]",
     subcommands = {
@@ -18,6 +17,7 @@ import java.util.Scanner;
         picocli.DeleteCommand.class,
         picocli.UpdateCommand.class,
         picocli.LoginCommand.class,
+        picocli.LogoutCommand.class,
         picocli.CustomHelpCommand.class
     }
 )
@@ -48,10 +48,13 @@ public class cliNavigation {
 
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new cliNavigation());
-        //dbConn.updateSessionID(10);
         if (args.length == 0) {
+            if(dbConn.getSessionID()==0){
+                System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+                return;
+            }
             commandLine.usage(System.out);
-            new picocli.CustomHelpCommand().printShowCommandOptions();
+            new picocli.CustomHelpCommand().printCommandOptions();
         } else {
             int exitCode = commandLine.execute(args);
             System.exit(exitCode);

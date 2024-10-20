@@ -19,7 +19,7 @@ public class CreateCommand implements Runnable {
     @Option(names = {"--username", "-u"}, description = "max. 32 character")
     String username;
 
-    @Option(names = {"--password", "-pa"}, description = "The password of the user to create")
+    @Option(names = {"--password", "-p"}, description = "The password of the user to create")
     String password;
 
     @Option(names = {"--title", "-t"}, description = "max. 32 char category / 128 todo")
@@ -64,6 +64,10 @@ public class CreateCommand implements Runnable {
                 System.out.printf("User '%s' has been successfully created.%n", username);
             }
             case "todo" -> {
+                if(db.getSessionID()==0){
+                    System.out.println("Use the login command to login");
+                    return;
+                }
                 if (title == null) {
                     title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the ToDo: ", "^.{1,128}$");
                 }
@@ -71,6 +75,10 @@ public class CreateCommand implements Runnable {
                 System.out.printf("ToDo '%s' has been successfully created.%n", title);
             }
             case "category" -> {
+                if(db.getSessionID()==0){
+                    System.out.println("Use the login command to login");
+                    return;
+                }
                 if (title == null) {
                     title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the category: ", "^.{1,128}$");
                 }

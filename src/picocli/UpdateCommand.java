@@ -20,6 +20,10 @@ public class UpdateCommand implements Runnable{
 
   	@Override
 	public void run() {
+		if(db.getSessionID()==0){
+            System.out.println("Use the login command to login");
+            return;
+        }
 		System.out.printf("Updating todo item %d with new title: %s%n", id, title);
 	}
 }

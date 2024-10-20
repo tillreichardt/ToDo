@@ -25,6 +25,10 @@ public class ShowCommand implements Runnable {
     
     @Override
     public void run() {
+        if(db.getSessionID()==0){
+            System.out.println("Use the login command to login");
+            return;
+        }
         Scanner scanner = new Scanner(System.in);
         if (type.equals("")) {
             type = cliNavigation.getInputWithValidation(scanner, "Please specify the type [user, todo, category]: ", "^(user|todo|category)$");
