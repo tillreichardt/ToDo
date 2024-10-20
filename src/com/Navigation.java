@@ -60,10 +60,12 @@ public class Navigation {
                         continueLoop = true;
                         break;
                     }
+                    /* Changed db.getToDos() logic
+
                     System.out.println("Here are all of your ToDos:");
                     for(int i = 0; i < (db.getToDos(userID).length);i++){
                         System.out.println(db.getToDos(userID)[i]);
-                    }
+                    }*/
                 }
 
                 // create todo
@@ -81,6 +83,7 @@ public class Navigation {
                     continueLoop = true;
                 }
 
+                /* Changed db.getToDos() logic
                 // delete todo
                 case 4 -> {
                     if(userID==0){
@@ -91,6 +94,7 @@ public class Navigation {
                     db.deleteToDo(db.findToDoByTitle(title));
                     continueLoop = true;
                 }
+                */
 
                 // create category
                 case 5 -> {

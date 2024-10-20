@@ -16,19 +16,19 @@ public class CreateCommand implements Runnable {
     @Parameters(index = "0", description = "Type of item to create: [user, todo, category]")
     String type;
 
-    @Option(names = {"--username", "-u"}, description = "The name of the user to create")
+    @Option(names = {"--username", "-u"}, description = "max. 32 character")
     String username;
 
     @Option(names = {"--password", "-pa"}, description = "The password of the user to create")
     String password;
 
-    @Option(names = {"--title", "-t"}, description = "The title of ToDo or category to create")
+    @Option(names = {"--title", "-t"}, description = "max. 32 char category / 128 todo")
     String title;
     
     @Option(names = {"--description", "-d"}, description = "Description of ToDo", defaultValue = "")
     String description;
 
-    @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo", defaultValue = "0")
+    @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo: [0, 1]", defaultValue = "1")
     int priority;
 
     @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "empty")
@@ -39,13 +39,11 @@ public class CreateCommand implements Runnable {
     @Override
     public void run() {
         PasswordHasher ph = new PasswordHasher();
-        Scanner scanner = new Scanner(System.in);  // Verwende Scanner für alle Eingaben
-
+        Scanner scanner = new Scanner(System.in);
         switch(type) {
             case "user" -> {
                 if (username == null) {
-                    System.out.print("Please enter the username: ");
-                    username = scanner.nextLine();
+                    username = cliNavigation.getInputWithValidation(scanner, "Please enter the username: ", "^.{1,32}$");
                 }
 
                 if (db.findUserByName(username) != 0) {
@@ -55,8 +53,7 @@ public class CreateCommand implements Runnable {
                 }
 
                 if (password == null) {
-                    System.out.print("Please enter the password: ");
-                    password = scanner.nextLine();
+                    password = cliNavigation.getInputWithValidation(scanner, "Please enter the password: ", "^.*$");
                 }
 
                 db.addUser(username, ph.hashPassword(password));
@@ -64,18 +61,15 @@ public class CreateCommand implements Runnable {
             }
             case "todo" -> {
                 if (title == null) {
-                    System.out.print("Please enter the title for the ToDo: ");
-                    title = scanner.nextLine();
+                    title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the ToDo: ", "^.{1,128}$");
                 }
                 db.createToDo(description, title, priority, db.findCategoryByDescription(category), db.getSessionID());
                 System.out.printf("ToDo '%s' has been successfully created.%n", title);
             }
             case "category" -> {
                 if (title == null) {
-                    System.out.print("Please enter the title for the category: ");
-                    title = scanner.nextLine();
+                    title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the category: ", "^.{1,128}$");
                 }
-                
                 db.createCategory(title);
                 System.out.printf("Category '%s' has been successfully created.%n", title);
             }

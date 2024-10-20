@@ -74,6 +74,18 @@ public class DatabaseConnector {
         return result; 
     }
 
+    public int[] getUserID(){
+        dbConn.executeStatement("select ID from User");
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        int rowCount = qr.getRowCount();
+        int[] result = new int[rowCount];
+        for(int i = 0; i < rowCount; i++){
+            result[i] = Integer.parseInt(qr.getData()[i][0]);
+        }
+        return result; 
+    }
+
+
 
 
 
@@ -115,6 +127,17 @@ public class DatabaseConnector {
         String[] result = new String[rowCount];
         for(int i = 0; i < rowCount; i++){
             result[i] = qr.getData()[i][0];
+        }
+        return result; 
+    }
+
+    public int[] getCategoriesID(){
+        dbConn.executeStatement("select ID from Category");
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        int rowCount = qr.getRowCount();
+        int[] result = new int[rowCount];
+        for(int i = 0; i < rowCount; i++){
+            result[i] = Integer.parseInt(qr.getData()[i][0]);
         }
         return result; 
     }
@@ -169,11 +192,8 @@ public class DatabaseConnector {
     }
 
     // reteurns an array with all todos of transferred ownerID
-    public String[] getToDos(int ownerID){
-        dbConn.executeStatement("select title "+
-                                "from ToDo "+
-                                "where OwnerID = " + ownerID +
-                                " order by Date asc");
+    public String[] getToDos(int ownerID, String sort, String order){
+                dbConn.executeStatement("select Title from ToDo where OwnerID = " + ownerID + " order by " + sort + " " + order);
         QueryResult qr = dbConn.getCurrentQueryResult();
         int rowCount = qr.getRowCount();
         String[] result = new String[rowCount];
@@ -183,7 +203,19 @@ public class DatabaseConnector {
         return result;
     }
 
-
+    public int[] getToDosID(int ownerID, String sort, String order){
+        dbConn.executeStatement("select ID "+
+                                "from ToDo "+
+                                "where OwnerID = " + ownerID +
+                                " order by " + sort + " " + order);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        int rowCount = qr.getRowCount();
+        int[] result = new int[rowCount];
+        for(int i = 0; i < rowCount; i++){
+            result[i] = Integer.parseInt(qr.getData()[i][0]);
+        }
+        return result;
+    }
 
 
 
@@ -201,7 +233,6 @@ public class DatabaseConnector {
         if(findToDoByID(toDoID)==0) return;
         if(findUserByID(userID)==0) return;
         dbConn.executeStatement("DELETE FROM Shared_ToDo_Users WHERE user_id = "+userID+" AND todo_id = "+toDoID);
-        System.out.println("The user with ID: '" + userID + "' has nolonger access to the ToDo with ID: " + toDoID + "'");
     }
 
     // returns an array with all todoIDs of the transferred ownerID

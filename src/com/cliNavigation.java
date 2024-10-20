@@ -5,6 +5,8 @@ import com.Connector.DatabaseConnector;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import java.util.Scanner;
+
 @Command(
     name = "todo", 
     description = "ToDo management app",
@@ -24,14 +26,24 @@ public class cliNavigation {
     private static DatabaseConnector dbConn;
 
     public cliNavigation(){
-        
         dbConn = new DatabaseConnector();
-        //dbConn.test();
-        userID = 0;
     }
     
     public static DatabaseConnector getDatabaseConnector(){
         return dbConn;
+    }
+
+    public static String getInputWithValidation(Scanner scanner, String question, String regex) {
+        // get user input until he enters something that matches the regex
+        String input;
+        do {
+            System.out.print(question);
+            input = scanner.nextLine().trim();
+            if (!input.matches(regex)) {
+                System.out.println("Invalid Input. Please try again!");
+            }
+        } while (!input.matches(regex));
+        return input;
     }
 
     public static void main(String[] args) {
