@@ -68,8 +68,16 @@ public class CreateCommand implements Runnable {
                     System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
                     return;
                 }
-                if (title == null) {
+                if(title == null) {
                     title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the ToDo: ", "^.{1,128}$");
+                }
+                if(db.findCategoryByDescription(category) == 0){
+                    System.out.printf("Category with title '%s' was not found.%n", category);
+                    return;
+                }
+                if(priority != 0 && priority != 1){
+                    System.out.println("Use 0 for a high priority and 1 for a low priority");
+                    return;
                 }
                 db.createToDo(description, title, priority, db.findCategoryByDescription(category), db.getSessionID());
                 System.out.printf("ToDo '%s' has been successfully created.%n", title);
