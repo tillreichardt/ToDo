@@ -19,7 +19,37 @@ public class DatabaseConnector {
         return dbConn.getErrorMessage();
     }
 
+    public void updateUserPassword(String password, int userID){
+        dbConn.executeStatement("Update User set Password = '" + password + "' where ID = " + userID);
+    }
 
+    public void updateUserName(String name, int userID){
+        dbConn.executeStatement("Update User set Name = '" + name + "' where ID = " + userID);
+    }
+
+    public void updateToDoTitle(String title, int todoID){
+        dbConn.executeStatement("Update ToDo set Title = '" + title + "' where ID = " + todoID);
+    }
+
+    public void updateToDoDescription(String desc, int todoID){
+        dbConn.executeStatement("Update ToDo set Description = '" + desc + "' where ID = " + todoID);
+    }
+
+    public void updateToDoPriority(int priority, int todoID){
+        dbConn.executeStatement("Update ToDo set Priority = " + priority + " where ID = " + todoID);
+    }
+
+    public void updateToDoCategory(int categoryID, int todoID){
+        dbConn.executeStatement("Update ToDo set CategoryID = " + categoryID + " where ID = " + todoID);
+    }
+
+    public void updateToDoOwner(int ownerID, int todoID){
+        dbConn.executeStatement("Update ToDo set OwnerID = " + ownerID + " where ID = " + todoID);
+    }
+
+    public void updateCategory(String desc, int categoryID){
+        dbConn.executeStatement("Update Category set Description = '" + desc + "' where ID = " + categoryID);
+    }
 
 
     // -------- CRUD User -------- 

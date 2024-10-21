@@ -51,7 +51,7 @@ public class CreateCommand implements Runnable {
                 }
 
                 if (db.findUserByName(username) != 0) {
-                    System.out.println("User with the username: '" + username + "' already exists");
+                    System.out.printf("User with the username: '%s' already exists", username);
                     scanner.close();
                     return;
                 }
