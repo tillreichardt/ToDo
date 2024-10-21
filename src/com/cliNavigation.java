@@ -23,14 +23,14 @@ import java.util.Scanner;
 )
 public class cliNavigation {
 
-    private static DatabaseConnector dbConn;
+    private static DatabaseConnector db;
 
     public cliNavigation(){
-        dbConn = new DatabaseConnector();
+        db = new DatabaseConnector();
     }
     
     public static DatabaseConnector getDatabaseConnector(){
-        return dbConn;
+        return db;
     }
 
     public static String getInputWithValidation(Scanner scanner, String question, String regex) {
@@ -49,8 +49,8 @@ public class cliNavigation {
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new cliNavigation());
         if (args.length == 0) {
-            if(dbConn.getSessionID()==0){
-                System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+            if(db.getSessionID()==0){
+                System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
                 return;
             }
             commandLine.usage(System.out);

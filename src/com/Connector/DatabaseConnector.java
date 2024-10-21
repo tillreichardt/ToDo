@@ -2,6 +2,8 @@ package com.Connector;
 
 import java.util.Scanner;
 
+import javax.management.QueryEval;
+
 import com.cliNavigation;
 
 public class DatabaseConnector {
@@ -94,7 +96,11 @@ public class DatabaseConnector {
         return true;
     }
     
-    
+    public String getNameOfUser(int id){
+        dbConn.executeStatement("Select Name from User where ID = "+id);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+        return qr.getData()[0][0];
+    }
     
     
     //returns ID of a user

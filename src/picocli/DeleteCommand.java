@@ -15,7 +15,7 @@ public class DeleteCommand implements Runnable {
     @Parameters(index = "0", description = "Type of item to delete: [user, todo, category]", defaultValue = "")
     String type;
 
-    @Option(names = {"--id", "-i"}, description = "The ID of the item to delete")
+    @Option(names = {"--id", "-i"}, description = "ID of the item to delete")
     Integer id;
     
     DatabaseConnector db = cliNavigation.getDatabaseConnector();
@@ -23,7 +23,7 @@ public class DeleteCommand implements Runnable {
     @Override
     public void run() {
         if(db.getSessionID()==0){
-            System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+            System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
             return;
         }
         Scanner scanner = new Scanner(System.in);

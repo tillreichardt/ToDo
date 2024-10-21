@@ -16,22 +16,22 @@ public class CreateCommand implements Runnable {
     @Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
 
-    @Option(names = {"--username", "-u"}, description = "max. 32 character")
+    @Option(names = {"--username", "-u"}, description = "Username (max. 32 characters)")
     String username;
 
-    @Option(names = {"--password", "-p"}, description = "The password of the user to create")
+    @Option(names = {"--password", "-p"}, description = "User's password")
     String password;
 
-    @Option(names = {"--title", "-t"}, description = "max. 32 char category / 128 todo")
+    @Option(names = {"--title", "-t"}, description = "Title (max. 128 characters for todos, 32 for categories)")
     String title;
     
-    @Option(names = {"--description", "-d"}, description = "Description of ToDo", defaultValue = "")
+    @Option(names = {"--description", "-d"}, description = "Detailed description of the ToDo", defaultValue = "")
     String description;
 
-    @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo: [0, 1]", defaultValue = "1")
+    @Option(names = {"--priority", "-pr"}, description = "Priority level: [0 = high, 1 = low]", defaultValue = "1")
     Integer priority;
 
-    @Option(names = {"--category", "-c"}, description = "Category of ToDo", defaultValue = "default")
+    @Option(names = {"--category", "-c"}, description = "Associated category", defaultValue = "default")
     String category;
 
     DatabaseConnector db = cliNavigation.getDatabaseConnector();
@@ -51,7 +51,7 @@ public class CreateCommand implements Runnable {
                 }
 
                 if (db.findUserByName(username) != 0) {
-                    System.out.printf("User with the username: '%s' already exists", username);
+                    System.out.printf("User with the username: '%s' already exists!%n", username);
                     scanner.close();
                     return;
                 }
@@ -65,7 +65,7 @@ public class CreateCommand implements Runnable {
             }
             case "todo" -> {
                 if(db.getSessionID()==0){
-                    System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+                    System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
                     return;
                 }
                 if (title == null) {
@@ -76,11 +76,15 @@ public class CreateCommand implements Runnable {
             }
             case "category" -> {
                 if(db.getSessionID()==0){
-                    System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+                    System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
                     return;
                 }
                 if (title == null) {
                     title = cliNavigation.getInputWithValidation(scanner, "Please enter the title for the category: ", "^.{1,128}$");
+                }
+                if(db.findCategoryByDescription(title)!= 0){
+                    System.out.printf("Category with the title '%s' already exists!%n", title);
+                    return;
                 }
                 db.createCategory(title);
                 System.out.printf("Category '%s' has been successfully created.%n", title);

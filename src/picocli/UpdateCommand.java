@@ -17,25 +17,25 @@ public class UpdateCommand implements Runnable{
 	@Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
 
-    @Option(names = {"--username", "-u"}, description = "max. 32 character")
+    @Option(names = {"--username", "-u"}, description = "New username (max. 32 characters)")
     String username;
 
-    @Option(names = {"--password", "-p"}, description = "The password of the user to create")
+    @Option(names = {"--password", "-p"}, description = "New password for the user")
     String password;
 
-    @Option(names = {"--title", "-t"}, description = "max. 32 char category / 128 todo")
+    @Option(names = {"--title", "-t"}, description = "New title of the ToDo or category")
     String title;
     
-    @Option(names = {"--description", "-d"}, description = "Description of ToDo")
+    @Option(names = {"--description", "-d"}, description = "Updated description of the ToDo")
     String description;
 
-    @Option(names = {"--priority", "-pr"}, description = "Priority of ToDo: [0, 1]")
+    @Option(names = {"--priority", "-pr"}, description = "Updated priority: [0 = high, 1 = low]")
     Integer priority;
 
-    @Option(names = {"--category", "-c"}, description = "Category of ToDo")
+    @Option(names = {"--category", "-c"}, description = "New category for the ToDo")
     String category;
 
-	@Option(names = {"--id", "-i"}, description = "The ID of the item to update")
+	@Option(names = {"--id", "-i"}, description = "ID of the item to update")
     Integer id;
 
 	DatabaseConnector db = cliNavigation.getDatabaseConnector();
@@ -43,7 +43,7 @@ public class UpdateCommand implements Runnable{
   	@Override
 	public void run() {
 		if(db.getSessionID()==0){
-            System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+            System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
             return;
         }
 		
@@ -116,7 +116,7 @@ public class UpdateCommand implements Runnable{
 						}
 						case "priority" -> {
 							if(priority == null || (priority != 0 && priority != 1)){
-								priority = Integer.parseInt(cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo title: ", "[0-1]"));
+								priority = Integer.parseInt(cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo priority [0, 1]: ", "[0-1]"));
 							}
 							db.updateToDoPriority(priority, id);
 							System.out.printf("The priority of Todo with ID '%d' has been updated to '%d'.%n", id, priority);

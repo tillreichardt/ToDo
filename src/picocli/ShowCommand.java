@@ -15,10 +15,10 @@ public class ShowCommand implements Runnable {
     @Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
 
-    @Option(names = {"--sort-by", "-s"}, description = "Sort by field: [priority, date]")
+    @Option(names = {"--sort-by", "-s"}, description = "Sort items by: [priority, date]")
     String sortBy;
     
-    @Option(names = {"--order", "-o"}, description = "Sort order: [asc, desc]", defaultValue = "asc")
+    @Option(names = {"--order", "-o"}, description = "Order of sorting: [asc, desc]", defaultValue = "asc")
     String order;
 
     DatabaseConnector db = cliNavigation.getDatabaseConnector(); 
@@ -26,7 +26,7 @@ public class ShowCommand implements Runnable {
     @Override
     public void run() {
         if(db.getSessionID()==0){
-            System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
+            System.out.printf("You are not logged in!%nUse the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
             return;
         }
         Scanner scanner = new Scanner(System.in);
