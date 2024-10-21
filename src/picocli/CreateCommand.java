@@ -36,6 +36,7 @@ public class CreateCommand implements Runnable {
 
     DatabaseConnector db = cliNavigation.getDatabaseConnector();
 
+    // command
     @Override
     public void run() {
         PasswordHasher ph = new PasswordHasher();
