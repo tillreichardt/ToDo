@@ -24,6 +24,10 @@ public class LoginCommand implements Runnable {
 
     @Override
     public void run() {
+        if(db.getSessionID()!=0){
+            System.out.println("You are already logged in!");
+            return;
+        }
         Scanner scanner = new Scanner(System.in);
         if(username==null){
             System.out.print("Please enter your username: ");

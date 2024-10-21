@@ -21,7 +21,7 @@ public class UpdateCommand implements Runnable{
   	@Override
 	public void run() {
 		if(db.getSessionID()==0){
-            System.out.println("Use the login command to login");
+            System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
             return;
         }
 		System.out.printf("Updating todo item %d with new title: %s%n", id, title);

@@ -30,10 +30,10 @@ public class DatabaseConnector {
         dbConn.executeStatement("Insert into User (Name, Password) Values ('"+ username +"','"+ password +"')");
     }
 
-    public void deleteUser(int userId) {
+    public boolean deleteUser(int userId) {
         if (userId == 1){
             System.out.println("Admin user cannot be deleted.");
-            return;
+            return false;
         } 
         // check if user has todos
         dbConn.executeStatement("SELECT ID FROM ToDo WHERE OwnerID = " + userId);
@@ -55,12 +55,13 @@ public class DatabaseConnector {
                 System.out.printf("Deleted %d ToDo(s) linked to user with ID '%d'.%n", toDoCount, userId);
             } else {
                 System.out.println("User deletion canceled.");
-                return;
+                return false;
             }
         }
 
         dbConn.executeStatement("DELETE FROM User WHERE ID = " + userId);
         System.out.printf("Deleted user with ID '%d'.%n", userId);
+        return true;
     }
     
     

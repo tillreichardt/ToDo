@@ -26,7 +26,7 @@ public class ShowCommand implements Runnable {
     @Override
     public void run() {
         if(db.getSessionID()==0){
-            System.out.println("Use the login command to login");
+            System.out.printf("Use the following command to log in: 'todo login -u [username] -p [password]' %nor create a new user using: 'todo create user -u [username] -p [password]'");
             return;
         }
         Scanner scanner = new Scanner(System.in);
@@ -35,6 +35,10 @@ public class ShowCommand implements Runnable {
         }
         switch(type){
             case "user" -> {
+                if(db.getSessionID()!=1){
+                    System.out.println("Only admins can see all users!");
+                    return;
+                }
                 System.out.printf("Showing users...%n");
                 for(int i = 0; i < db.getUser().length;i++){
                     System.out.println("["+db.getUserID()[i]+"] " + db.getUser()[i]);

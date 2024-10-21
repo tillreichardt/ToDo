@@ -9,15 +9,15 @@ public class MariaDBConnector{
 
   public MariaDBConnector(String pIP, int pPort, String pDatabase, String pUsername, String pPassword){
     try {
-      //Laden der Treiberklasse
-      Class.forName("org.mariadb.jdbc.Driver");
+        //Laden der Treiberklasse
+        Class.forName("org.mariadb.jdbc.Driver");
 
-      connection = DriverManager.getConnection("jdbc:mariadb://"+pIP+":"+pPort+"/"+pDatabase, pUsername, pPassword);
+        connection = DriverManager.getConnection("jdbc:mariadb://"+pIP+":"+pPort+"/"+pDatabase, pUsername, pPassword);
 
     } catch (Exception e) {
-      message = e.getMessage();
+        message = e.getMessage();
     }
-  }
+  }	
 
   public void executeStatement(String pSQLStatement){  
     //Altes Ergebnis loeschen
@@ -29,7 +29,7 @@ public class MariaDBConnector{
       Statement statement = connection.createStatement();
 
       //SQL Anweisung an die DB schicken.
-      if (statement.execute(pSQLStatement)) { //Fall 1: Es gibt ein Ergebnis
+        if (statement.execute(pSQLStatement)) { //Fall 1: Es gibt ein Ergebnis
 
         //Resultset auslesen
         ResultSet resultset = statement.getResultSet();
