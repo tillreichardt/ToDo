@@ -3,23 +3,12 @@
 
 This is a Java console program that allows you to create, display, delete, and update users, ToDos, and categories. Below you will find instructions on how to install and run the project.
 
-## Prerequisites
-
-1.  Ensure that you have a working Java version installed (at least Java 8).
-2.  Libraries (.jar files)  
-    Install or download these libraries:
-    -   [org.mariadb.jdbc:mariadb-java-client:3.4.1](https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client/3.4.1)
-    -   [info.picocli:picocli:4.7.1](https://mvnrepository.com/artifact/info.picocli/picocli/4.7.1)
-
 ## Installation and Execution
 
 1.  **Download Project**  
     Download the project repository from GitHub.
-    
-2.  **Include Libraries**  
-    Create a `lib` folder where you add the above-mentioned .jar files (`mariadb-java-client-3.4.1.jar` and `picocli-4.7.1.jar`).
-    
-3.  **Run**  
+
+2.  **Run**  
     Ensure that the folders in the storage path do not contain spaces.
     
     -   **Windows Command Line Prompt (cmd)**
