@@ -1,5 +1,6 @@
 package com.Connector;
 
+import java.util.Properties;
 import java.util.Scanner;
 
 import com.cliNavigation;
@@ -7,8 +8,15 @@ import com.cliNavigation;
 public class DatabaseConnector {
 
     // connect with Database 
-    private MariaDBConnector dbConn = new MariaDBConnector("wyrbill.de", 12089, "todo_app", "till", "123456");
-    
+    Properties config = DatabaseConfig.loadProperties();
+    private MariaDBConnector dbConn = new MariaDBConnector(
+    config.getProperty("DB_HOST"),
+    Integer.parseInt(config.getProperty("DB_PORT")),
+    config.getProperty("DB_NAME"),
+    config.getProperty("DB_USER"),
+    config.getProperty("DB_PASSWORD")
+    );
+
     public DatabaseConnector(){
 
     }
