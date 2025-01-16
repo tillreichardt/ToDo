@@ -1,55 +1,62 @@
 
-# ToDo-Projekt
+# ToDo Project
 
-Dies ist ein Java-Konsolenprogramm, mit dem man Nutzer, ToDos und Kategorien erstellen, anzeigen, löschen und aktualisieren kann. Nachfolgend findest du eine Anleitung, wie du das Projekt installierst und ausführen kannst.
+This is a Java console program that allows you to create, display, delete, and update users, ToDos, and categories. Below you will find instructions on how to install and run the project.
 
+## Prerequisites
 
-## Voraussetzungen
+1.  Ensure that you have a working Java version installed (at least Java 8).
+2.  Libraries (.jar files)  
+    Install or download these libraries:
+    -   [org.mariadb.jdbc:mariadb-java-client:3.4.1](https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client/3.4.1)
+    -   [info.picocli:picocli:4.7.1](https://mvnrepository.com/artifact/info.picocli/picocli/4.7.1)
 
-1. Stelle sicher, dass du eine lauffähige Java-Version installiert hast (mindestens Java 8).  
-2. Bibliotheken (.jar-Dateien)  
-	Installiere bzw. lade diese Bibliotheken herunter:
-   - [org.mariadb.jdbc:mariadb-java-client:3.4.1](https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client/3.4.1)  
-   - [info.picocli:picocli:4.7.1](https://mvnrepository.com/artifact/info.picocli/picocli/4.7.1)  
+## Installation and Execution
 
+1.  **Download Project**  
+    Download the project repository from GitHub.
+    
+2.  **Include Libraries**  
+    Create a `lib` folder where you add the above-mentioned .jar files (`mariadb-java-client-3.4.1.jar` and `picocli-4.7.1.jar`).
+    
+3.  **Run**  
+    Ensure that the folders in the storage path do not contain spaces.
+    
+    -   **Windows Command Line Prompt (cmd)**
+        
+        1.  Change to the project directory
+            
+            ```
+            C:\Users\user>cd /d E:\ToDo-main\ToDo-main
+            ```
+            
+        2.  Execute the `.bat` file with the following command `todo`:
+            
+            ```
+            E:\ToDo-main\ToDo-main>todo
+            ```
+            
+    -   **PowerShell**
+        
+        1.  Also change to the project directory
+            
+            ```powershell
+            PS C:\Users\user> cd E:\ToDo-main\ToDo-main\
+            ```
+            
+        2.  Execute the `.bat` file with the following command `.\todo.bat`:
+            
+            ```powershell
+            PS E:\ToDo-main\ToDo-main> .\todo.bat
+            ```
+            
 
+## Usage
 
-## Installation und Ausführung
+To use the program, call the `todo` command in the **Windows Command Line Prompt** and `.\todo.bat` in **PowerShell**, and pass the appropriate **Command** and **Type** with the corresponding **Options**.
 
-1. **Projekt herunterladen**  
-   Lade das Projekt-Repository von GitHub herunter.
-2. **Bibliotheken einbinden**  
-   Erstelle einen `lib`-Ordner, in welchem du die oben genannten .jar-Dateien (`mariadb-java-client-3.4.1.jar` und `picocli-4.7.1.jar`) hinzufügst.
+The following assumes that **Windows Command Line Prompt** is being used.
 
-3. **Ausführen**  
-	
-	Stelle sicher, dass die Ordner im Speicherpfad keine Leerzeichen beinhalten. 
-   - **Windows Command Line Prompt (cmd)**  
-
-		1. Wechsle in das Projektverzeichnis 
-			``` 
-			C:\Users\user>cd /d E:\ToDo-main\ToDo-main
-			```
-		2. führe die `.bat`-Datei mit folgendem Befehl aus:
-		     ```
-		     E:\ToDo-main\ToDo-main>todo
-   - **PowerShell**  
-     1. Wechsle ebenfalls in das Projektverzeichnis 
-		   ```powershell
-		   PS C:\Users\user> cd E:\ToDo-main\ToDo-main\
-	     ```
-
-     3. führe die `.bat`-Datei mit folgendem Befehl aus:
-		   ```powershell
-		   PS E:\ToDo-main\ToDo-main> .\todo.bat
-	     ```
----
-
-## Verwendung
-
-Um das Programm zu nutzen, rufe in **Windows Command Line Prompt** den Befehl `todo` auf und in **PowerShell** den Befehl `.\todo.bat` und übergib ihm den passenden **Command** und **Type** mit den entsprechenden **Options**.
-
-Im Folgenden wird davon ausgegangen, dass **Windows Command Line Prompt** verwendet wird.
 ```bash
 Usage: todo [COMMAND] [TYPE] [OPTIONS]
 
@@ -63,96 +70,113 @@ Commands:
   login   Log in to your account
   logout  Log out of your account
   help    Show this help message
+
 ```
 
 ### ShowCommand
-Zeige eine Liste von Einträgen oder einen einzelnen Eintrag, ggf. sortiert.
 
-- **Optionen:**
-  - `--sort-by <String>` : Mögliche Werte: `[priority, date]`  
-  - `--order <String>` : Mögliche Werte: `[asc, desc]`
+Display a list of entries or a single entry, possibly sorted.
 
-**Beispiel:**
+-   **Options:**
+    -   `--sort-by <String>` : Possible values: `[priority, date]`
+    -   `--order <String>` : Possible values: `[asc, desc]`
+
+**Example:**
+
 ```bash
 todo show todo --sort-by priority --order asc
 ```
-Zeigt alle ToDos, sortiert nach `priority` in `asc ` Reihenfolge.
+
+Displays all ToDos, sorted by `priority` in `asc` order.
 
 ### CreateCommand
-Erstelle eine neue Entität vom Typ `user`, `todo` oder `category`.
 
-- **Optionen:**
-  - **user**:  
-    - `--username <String>` : Benutzername (max. 32 Zeichen)  
-    - `--password <String>` : Passwort
-  - **todo**:  
-    - `--title <String>` : Titel (max. 128 Zeichen)  
-    - `--description <String>` : Detaillierte Beschreibung  
-    - `--priority <Integer>` : Priorität: `[0 = high, 1 = low]`  
-    - `--category <String>` : Zugehörige Kategorie
-  - **category**:  
-    - `--title <String>` : Titel (max. 32 Zeichen)
+Create a new entity of type `user`, `todo`, or `category`.
 
-**Beispiel:**
+-   **Options:**
+    -   **user**:
+        -   `--username <String>` : Username (max. 32 characters)
+        -   `--password <String>` : Password
+    -   **todo**:
+        -   `--title <String>` : Title (max. 128 characters)
+        -   `--description <String>` : Detailed description
+        -   `--priority <Integer>` : Priority: `[0 = high, 1 = low]`
+        -   `--category <String>` : Associated category
+    -   **category**:
+        -   `--title <String>` : Title (max. 32 characters)
+
+**Example:**
+
 ```bash
-todo create user --username Max --password geheim
+todo create user --username Max --password secret
 ```
-Erstellt einen neuen Benutzer namens *Max* mit dem Passwort *geheim*.
+
+Creates a new user named _Max_ with the password _secret_.
 
 ### DeleteCommand
-Löscht eine Entität (Benutzer, ToDo oder Kategorie) anhand ihrer ID.
 
-- **Optionen:**
-  - `--id <Integer>` : ID des Elements, das gelöscht werden soll
+Deletes an entity (user, ToDo, or category) by its ID.
 
-**Beispiel:**
+-   **Options:**
+    -   `--id <Integer>` : ID of the item to be deleted
+
+**Example:**
+
 ```bash
 todo delete todo --id 42
 ```
-Löscht das ToDo-Element mit der ID `42`.
+
+Deletes the ToDo item with ID `42`.
 
 ### UpdateCommand
-Aktualisiert eine bestehende Entität (Benutzer, ToDo oder Kategorie).
 
-- **Optionen:**
-  - `--id <Integer>` : ID des Elements, das aktualisiert werden soll
-  - **user**:  
-    - `--username <String>` : Neuer Benutzername (max. 32 Zeichen)  
-    - `--password <String>` : Neues Passwort
-  - **todo**:  
-    - `--title <String>` : Neuer Titel  
-    - `--description <String>` : Aktualisierte Beschreibung  
-    - `--priority <Integer>` : Neue Priorität: `[0 = high, 1 = low]`  
-    - `--category <String>` : Neue Kategorie
-  - **category**:  
-    - `--title <String>` : Neuer Titel
+Updates an existing entity (user, ToDo, or category).
 
-**Beispiel:**
+-   **Options:**
+    -   `--id <Integer>` : ID of the item to be updated
+    -   **user**:
+        -   `--username <String>` : New username (max. 32 characters)
+        -   `--password <String>` : New password
+    -   **todo**:
+        -   `--title <String>` : New title
+        -   `--description <String>` : Updated description
+        -   `--priority <Integer>` : New priority: `[0 = high, 1 = low]`
+        -   `--category <String>` : New category
+    -   **category**:
+        -   `--title <String>` : New title
+
+**Example:**
+
 ```bash
 todo update todo --id 42 --title newTitle --priority 0
 ```
-Aktualisiert das ToDo mit ID `42`, indem der Titel auf *newTitle* und die Priorität auf *high* (0) gesetzt wird.
+
+Updates the ToDo with ID `42`, setting the title to _newTitle_ and the priority to _high_ (0).
 
 ### Login
-Melde dich mit einem Benutzernamen und Passwort an.
+
+Log in with a username and password.
 
 ```bash
-todo login --username Max --password geheim
+todo login --username Max --password secret
 ```
 
 ### Logout
-Wenn du das Programm nicht mehr verwenden möchtest, melde dich von deinem Konto ab.
+
+If you no longer wish to use the program, log out of your account.
 
 ```bash
 todo logout
 ```
 
-### Hilfe anzeigen
-Zeigt eine Hilfeübersicht aller verfügbaren Befehle.
+### Show Help
+
+Displays a help overview of all available commands.
 
 ```bash
 todo help
 ```
 
----
-Viel Spaß beim Benutzen des ToDo-Projekts!
+----------
+
+Have fun using the ToDo Project!
