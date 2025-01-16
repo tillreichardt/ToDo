@@ -8,17 +8,19 @@ import com.cliNavigation;
 public class DatabaseConnector {
 
     // connect with Database 
-    Properties config = DatabaseConfig.loadProperties();
-    private MariaDBConnector dbConn = new MariaDBConnector(
-    config.getProperty("DB_HOST"),
-    Integer.parseInt(config.getProperty("DB_PORT")),
-    config.getProperty("DB_NAME"),
-    config.getProperty("DB_USER"),
-    config.getProperty("DB_PASSWORD")
-    );
+    Properties config;
+    private MariaDBConnector dbConn;
+
 
     public DatabaseConnector(){
-
+        config = DatabaseConfig.loadProperties();
+        dbConn = new MariaDBConnector(
+        config.getProperty("DB_HOST"),
+        Integer.parseInt(config.getProperty("DB_PORT")),
+        config.getProperty("DB_NAME"),
+        config.getProperty("DB_USER"),
+        config.getProperty("DB_PASSWORD")
+        );
     }
   
     public void disconnect(){
