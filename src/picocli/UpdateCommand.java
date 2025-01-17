@@ -98,41 +98,71 @@ public class UpdateCommand implements Runnable{
                 if(db.findToDoByID(id)==0){
                     System.out.printf("ToDo with ID '%d' was not found.%n", id);
                 } else {
-                    String response = cliNavigation.getInputWithValidation(scanner, "What do you want to update? [title, description, priority, category]: ", "^(title|description|priority|category)$");
-                	switch(response){
-						case "title" -> {
-							if(title == null){
-								title = cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo title: ", "^.{1,128}$");
-							}
-							db.updateToDoTitle(title, id);
-							System.out.printf("The title of Todo with ID '%d' has been updated to '%s'.%n", id, title);
-						}
-						case "description" -> {
-							if(description == null){
-								description = cliNavigation.getInputWithValidation(scanner, "Please enter new description for the ToDo: ", "^.{1,1024}$");
-							}
-							db.updateToDoDescription(description, id);
-							System.out.printf("The description of Todo with ID '%d' has been updated to '%s'.%n", id, description);
-						}
-						case "priority" -> {
-							if(priority == null || (priority != 0 && priority != 1)){
-								priority = Integer.parseInt(cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo priority [0, 1]: ", "[0-1]"));
-							}
-							db.updateToDoPriority(priority, id);
-							System.out.printf("The priority of Todo with ID '%d' has been updated to '%d'.%n", id, priority);
-						}
-						case "category" -> {
-							if(category == null){
-								category = cliNavigation.getInputWithValidation(scanner, "Please enter new category title: ", "^.{1,128}$");
-							}
-							if(db.findCategoryByDescription(category)==0){
-								System.out.printf("Category with title '%s' was not found.%n", category);
+					// no options 
+                    if(title==null && description==null && priority==null && category==null){
+						String response = cliNavigation.getInputWithValidation(scanner, "What do you want to update? [title, description, priority, category]: ", "^(title|description|priority|category)$");
+						switch(response){
+							case "title" -> {
+								if(title == null){
+									title = cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo title: ", "^.{1,128}$");
+								}
+								db.updateToDoTitle(title, id);
+								System.out.printf("The title of Todo with ID '%d' has been updated to '%s'.%n", id, title);
 								return;
 							}
-							db.updateToDoCategory(db.findCategoryByDescription(category), id);
-							System.out.printf("The category of Todo with ID '%d' has been updated to '%s'.%n", id, category);
+							case "description" -> {
+								if(description == null){
+									description = cliNavigation.getInputWithValidation(scanner, "Please enter new description for the ToDo: ", "^.{1,1024}$");
+								}
+								db.updateToDoDescription(description, id);
+								System.out.printf("The description of Todo with ID '%d' has been updated to '%s'.%n", id, description);
+								return;
+							}
+							case "priority" -> {
+								if(priority == null || (priority != 0 && priority != 1)){
+									priority = Integer.parseInt(cliNavigation.getInputWithValidation(scanner, "Please enter new ToDo priority [0, 1]: ", "[0-1]"));
+								}
+								db.updateToDoPriority(priority, id);
+								System.out.printf("The priority of Todo with ID '%d' has been updated to '%d'.%n", id, priority);
+								return;
+							}
+							case "category" -> {
+								if(category == null){
+									category = cliNavigation.getInputWithValidation(scanner, "Please enter new category title: ", "^.{1,128}$");
+								}
+								if(db.findCategoryByDescription(category)==0){
+									System.out.printf("Category with title '%s' was not found.%n", category);
+									return;
+								}
+								db.updateToDoCategory(db.findCategoryByDescription(category), id);
+								System.out.printf("The category of Todo with ID '%d' has been updated to '%s'.%n", id, category);
+								return;
+							}
 						}
-				}
+					}
+
+					// one option was given
+					if (title != null){
+						db.updateToDoTitle(title, id);
+						System.out.printf("The title of Todo with ID '%d' has been updated to '%s'.%n", id, title);
+					}
+					if (description != null){
+						db.updateToDoDescription(description, id);
+						System.out.printf("The description of Todo with ID '%d' has been updated to '%s'.%n", id, description);
+					}
+					if (priority != null){
+						db.updateToDoPriority(priority, id);
+						System.out.printf("The priority of Todo with ID '%d' has been updated to '%d'.%n", id, priority);
+					}
+					if (category != null){
+						if(db.findCategoryByDescription(category)==0){
+							System.out.printf("Category with title '%s' was not found.%n", category);
+							return;
+						}
+						db.updateToDoCategory(db.findCategoryByDescription(category), id);
+						System.out.printf("The category of Todo with ID '%d' has been updated to '%s'.%n", id, category);
+					}
+					
                 }
 			}
 			case "category" -> {
