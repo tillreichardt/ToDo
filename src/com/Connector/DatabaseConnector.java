@@ -398,8 +398,11 @@ public class DatabaseConnector {
     }
 
     // reteurns an array with all todos of transferred ownerID
-    public String[] getToDos(int ownerID, String sort, String order){
-        dbConn.executeStatement("select Title from ToDo where OwnerID = " + ownerID + " order by " + sort + " " + order);
+    public String[] getSharedToDos(int userID, String sort, String order){
+        dbConn.executeStatement("SELECT title " +
+                                "FROM ToDo t JOIN Shared_ToDo_Users s ON s.todo_id = t.ID " +
+                                "WHERE s.user_ID = " + userID +
+                                " ORDER BY " + sort + " " + order);
         QueryResult qr = dbConn.getCurrentQueryResult();
 
         if(qr==null || qr.getRowCount() == 0) return new String[0];
@@ -413,11 +416,29 @@ public class DatabaseConnector {
         return result;
     }
 
-    public int[] getToDosID(int ownerID, String sort, String order){
+    public int[] getOwnedToDosID(int ownerID, String sort, String order){
         dbConn.executeStatement("select ID "+
                                 "from ToDo "+
                                 "where OwnerID = " + ownerID +
                                 " order by " + sort + " " + order);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr==null || qr.getRowCount() == 0) return new int[0];
+
+        int rowCount = qr.getRowCount();
+        int[] result = new int[rowCount];
+        
+        for(int i = 0; i < rowCount; i++){
+            result[i] = Integer.parseInt(qr.getData()[i][0]);
+        }
+        return result;
+    }
+
+    public int[] getSharedToDosID(int userID, String sort, String order){
+        dbConn.executeStatement("SELECT t.ID " +
+                                "FROM ToDo t JOIN Shared_ToDo_Users s ON s.todo_id = t.ID " +
+                                "WHERE s.user_ID = " + userID +
+                                " ORDER BY " + sort + " "+ order);
         QueryResult qr = dbConn.getCurrentQueryResult();
 
         if(qr==null || qr.getRowCount() == 0) return new int[0];

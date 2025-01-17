@@ -84,7 +84,7 @@ public class UpdateCommand implements Runnable{
                 }
 				
                 if(db.getSessionID()!=1){ // not an admin
-                    int[] toDosOfUser = db.getToDosID(db.getSessionID(), "date", "asc");
+                    int[] toDosOfUser = db.getSharedToDosID(db.getSessionID(), "date", "asc");
                     boolean found = false;
                     for(int i = 0; i < toDosOfUser.length; i++){
                         if(id == toDosOfUser[i]) found = true;

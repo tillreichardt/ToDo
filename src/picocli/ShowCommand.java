@@ -50,8 +50,8 @@ public class ShowCommand implements Runnable {
                     sortBy = cliNavigation.getInputWithValidation(scanner, "Please enter sort by field [priority, date]: ", "^(date|priority)$");
                 }
                 System.out.printf("Showing todo items sorted by %s in %s order...%n", sortBy, order);
-                for(int i = 0; i < (db.getToDos(db.getSessionID(),sortBy,order).length);i++){
-                    System.out.println("["+db.getToDosID(db.getSessionID(),sortBy,order)[i]+"] " + db.getToDos(db.getSessionID(),sortBy,order)[i]);
+                for(int i = 0; i < (db.getSharedToDos(db.getSessionID(),sortBy,order).length);i++){
+                    System.out.println("["+db.getSharedToDosID(db.getSessionID(),sortBy,order)[i]+"] " + db.getSharedToDos(db.getSessionID(),sortBy,order)[i]);
                 }
             }
 

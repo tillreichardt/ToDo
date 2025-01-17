@@ -58,27 +58,54 @@ public class DeleteCommand implements Runnable {
             }
 
             case "todo" -> {
-                if(id==null){
+                if (id == null) {
                     id = Integer.parseInt(cliNavigation.getInputWithValidation(scanner, "Please enter ID of ToDo to delete: ", "^[0-9]+$"));
                 }
-                if(db.getSessionID()!=1){ // not an admin
-                    int[] toDosOfUser = db.getToDosID(db.getSessionID(), "date", "asc");
-                    boolean found = false;
-                    for(int i = 0; i < toDosOfUser.length; i++){
-                        if(id == toDosOfUser[i]) found = true;
+                
+                if (db.getSessionID() != 1) { // not an admin
+                    int[] sharedToDos = db.getSharedToDosID(db.getSessionID(), "date", "asc");
+                    int[] ownedToDos = db.getOwnedToDosID(db.getSessionID(), "date", "asc");
+                    
+                    // if todo is owned -> delete todo -> "todo is deleted from the database"
+                    // if todo is shared and therefore not owned -> deleteSharedConnection -> "todo is only deleted from my account, not from the database"
+
+                    // check if todo is owned
+                    boolean isOwned = false;
+                    for (int ownedId : ownedToDos) {
+                        if (id == ownedId) {
+                            isOwned = true;
+                            break;
+                        }
                     }
-                    if(!found){
-                        System.out.printf("ToDo with ID '%d' was not found.%n", id);
+                    if (!isOwned) {
+                        boolean isShared = false;
+                        // check if todo is shared
+                        for (int sharedId : sharedToDos) {
+                            if (id == sharedId) {
+                                isShared = true;
+                                break;
+                            }
+                        }
+                        if (!isShared) {
+                            System.out.printf("ToDo with ID '%d' was not found.%n", id);
+                            return;
+                        }
+                        db.deleteSharedConnection(db.getSessionID(), id);
+                        System.out.printf("Connection to shared ToDo with ID '%d' has been removed.%n", id);
                         return;
                     }
-                }
-                
-                if(db.findToDoByID(id)==0){
-                    System.out.printf("ToDo with ID '%d' was not found.%n", id);
-                } else {
                     db.deleteToDo(id);
+                    System.out.printf("ToDo with ID '%d' has been deleted.%n", id);
+                } else {
+                    // delete todo when user is an admin, even if this is not his todo 
+                    if (db.findToDoByID(id) == 0) {
+                        System.out.printf("ToDo with ID '%d' was not found.%n", id);
+                    } else {
+                        db.deleteToDo(id);
+                    }
                 }
             }
+            
 
             case "category" -> {
                 if(id==null){
