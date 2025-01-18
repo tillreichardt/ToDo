@@ -246,6 +246,15 @@ public class DatabaseConnector {
     
 
     // <---------------- getter methods ---------------->
+    public String getPublicID(int userID){
+        dbConn.executeStatement("select publicID from User where ID = " + userID);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr == null || qr.getRowCount() == 0) return "";
+        
+        return qr.getData()[0][0];
+    } 
+
     public String getNameOfUser(int id){
         dbConn.executeStatement("Select Name from User where ID = "+id);
         QueryResult qr = dbConn.getCurrentQueryResult();
