@@ -110,8 +110,8 @@ public class DatabaseConnector {
     public void setSharedConnection(int userID, int toDoID){
         if(findToDoByID(toDoID)==0) return;
         if(findUserByID(userID)==0) return;
-        dbConn.executeStatement("Insert into Shared_ToDo_Users (user_id,todo_id)"+
-                                "Values ("+userID+","+toDoID+")");
+        dbConn.executeStatement("Insert into Shared_ToDo_Users (user_id,todo_id,accepted)"+
+                                "Values ("+userID+","+toDoID+",0)");
     }
 
     public void deleteSharedConnection(int userID, int toDoID){
