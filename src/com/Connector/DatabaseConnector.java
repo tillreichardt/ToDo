@@ -131,7 +131,7 @@ public class DatabaseConnector {
 
     // <---------------- delete methods ---------------->
     public boolean deleteUser(int userId) {
-        if (userId == 1){
+        if (userId == 1 || userId == 22){
             System.out.println("Admin user cannot be deleted.");
             return false;
         } 
