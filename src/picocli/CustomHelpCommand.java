@@ -33,12 +33,14 @@ public class CustomHelpCommand implements Runnable {
         CommandLine createCmd = new CommandLine(new CreateCommand());
         CommandLine updateCmd = new CommandLine(new UpdateCommand());
         CommandLine deleteCmd= new CommandLine(new DeleteCommand());
+        CommandLine shareCmd= new CommandLine(new ShareCommand());
 
         printOptions(showCmd);
-        printOptions(deleteCmd);
         System.out.println("\nCreateCommand options:");
         printOptions(createCmd);
+        printOptions(deleteCmd);
         printOptions(updateCmd);
+        printOptions(shareCmd);
     }
     
     private void printOptions(CommandLine commandLine, String... optionNames) {
@@ -57,6 +59,7 @@ public class CustomHelpCommand implements Runnable {
         List<OptionSpec> sortOptions = new List<>();
         List<OptionSpec> deleteOptions = new List<>();
         List<OptionSpec> updateOptions = new List<>();
+        List<OptionSpec> shareOptions = new List<>();
     
         // Sortiere die Optionen in die entsprechenden Kategorien
         options.toFirst();
@@ -86,6 +89,10 @@ public class CustomHelpCommand implements Runnable {
             else if (option.longestName().contains("id") && commandLine.getCommandName().equals("delete")) {
                 deleteOptions.append(option);
             }
+            // Optionen für ShareCommand (todoid, publicid)
+            else if (commandLine.getCommandName().equals("share") && option.longestName().contains("todoid") || option.longestName().contains("publicid")) {
+                shareOptions.append(option);
+            }
             // Optionen für UpdateCommand (id, username, password, title, description, priority, category)
             else if (commandLine.getCommandName().equals("update") && 
                      (option.longestName().contains("id") || option.longestName().contains("username") || 
@@ -108,6 +115,19 @@ public class CustomHelpCommand implements Runnable {
                 String desc = option.description().length > 0 ? option.description()[0] : "";
                 System.out.printf("    %-15s %-15s %s%n", option.longestName(), "<" + paramType + ">", desc);
                 sortOptions.next();
+            }
+        }
+        
+        // ShareCommand options anzeigen
+        if (!shareOptions.isEmpty()) {
+            System.out.println("\nShareCommand options:");
+            shareOptions.toFirst();
+            while (shareOptions.hasAccess()) {
+                OptionSpec option = shareOptions.getContent();
+                String paramType = option.type().getSimpleName();
+                String desc = option.description().length > 0 ? option.description()[0] : "";
+                System.out.printf("    %-15s %-15s %s%n", option.longestName(), "<" + paramType + ">", desc);
+                shareOptions.next();
             }
         }
     
