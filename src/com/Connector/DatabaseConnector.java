@@ -237,23 +237,32 @@ public class DatabaseConnector {
         System.out.printf("Deleted ToDo with ID '%d'.%n", toDoID);
     }
     
-
-
-
-
-
-
     
 
+
+
+
+
+
+
     // <---------------- getter methods ---------------->
-    public String getPublicID(int userID){
+    public String getPublicIDFromUserID(int userID){
         dbConn.executeStatement("select publicID from User where ID = " + userID);
         QueryResult qr = dbConn.getCurrentQueryResult();
 
         if(qr == null || qr.getRowCount() == 0) return "";
-        
+
         return qr.getData()[0][0];
     } 
+
+    public int getUserIDFromPublicID(String publicID){
+        dbConn.executeStatement("select ID from User where publicID = '" + publicID + "'");
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr == null || qr.getRowCount() == 0) return 0;
+
+        return Integer.parseInt(qr.getData()[0][0]);
+    }
 
     public String getNameOfUser(int id){
         dbConn.executeStatement("Select Name from User where ID = "+id);

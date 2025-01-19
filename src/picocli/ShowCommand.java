@@ -35,7 +35,7 @@ public class ShowCommand implements Runnable {
         }
         switch(type){
             case "user" -> {
-                String publicID = db.getPublicID(db.getSessionID());
+                String publicID = db.getPublicIDFromUserID(db.getSessionID());
                 System.out.printf("Your publicID is: '%s'. You can use this to share ToDos.%n", publicID);
                 if(db.getSessionID()==1){
                     System.out.printf("%nShowing users...%n");
