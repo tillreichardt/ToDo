@@ -10,7 +10,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 
-@Command(name = "share", description = "Share your Information")
+@Command(name = "share", description = "Share a Todo with another user")
 public class ShareCommand implements Runnable {
     @Parameters(index = "0", description = "Type of item to create: [user, todo, category]", defaultValue = "")
     String type;
