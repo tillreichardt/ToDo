@@ -24,9 +24,3 @@ replay_pid*
 
 # Ignore configuration files
 config.properties
-
-# Don't ignore .lib folder
-!.lib
-
-# VisualStudioCode
-.vscode
