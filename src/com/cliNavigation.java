@@ -16,6 +16,7 @@ import java.util.Scanner;
         picocli.CreateCommand.class, 
         picocli.DeleteCommand.class,
         picocli.UpdateCommand.class,
+        picocli.ShareCommand.class,
         picocli.LoginCommand.class,
         picocli.LogoutCommand.class,
         picocli.CustomHelpCommand.class

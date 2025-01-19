@@ -9,9 +9,6 @@ import picocli.CommandLine.Option;
 
 import java.util.Scanner;
 
-// checken ob UserID in Session= 0 ist, dann log out, sonst ist jemand eingeloggt. 
-// Beim ausloggen auf 0 setzen, beim einloggen auf aktuelle Userid
-
 @Command(name = "login", description = "Log in to your account")
 public class LoginCommand implements Runnable {
     @Option(names = {"--username", "-u"}, description = "Enter username of your account")

@@ -35,13 +35,13 @@ public class ShowCommand implements Runnable {
         }
         switch(type){
             case "user" -> {
-                if(db.getSessionID()!=1){
-                    System.out.println("Only admins can see all users!");
-                    return;
-                }
-                System.out.printf("Showing users...%n");
-                for(int i = 0; i < db.getUser().length;i++){
-                    System.out.println("["+db.getUserID()[i]+"] " + db.getUser()[i]);
+                String publicID = db.getPublicIDFromUserID(db.getSessionID());
+                System.out.printf("Your publicID is: '%s'. You can use this to share ToDos.%n", publicID);
+                if(db.getSessionID()==1){
+                    System.out.printf("%nShowing users...%n");
+                    for(int i = 0; i < db.getUser().length;i++){
+                        System.out.println("["+db.getUserID()[i]+"] " + db.getUser()[i]);
+                    }
                 }
             }
 
@@ -50,8 +50,8 @@ public class ShowCommand implements Runnable {
                     sortBy = cliNavigation.getInputWithValidation(scanner, "Please enter sort by field [priority, date]: ", "^(date|priority)$");
                 }
                 System.out.printf("Showing todo items sorted by %s in %s order...%n", sortBy, order);
-                for(int i = 0; i < (db.getToDos(db.getSessionID(),sortBy,order).length);i++){
-                    System.out.println("["+db.getToDosID(db.getSessionID(),sortBy,order)[i]+"] " + db.getToDos(db.getSessionID(),sortBy,order)[i]);
+                for(int i = 0; i < (db.getSharedToDos(db.getSessionID(),sortBy,order).length);i++){
+                    System.out.println("["+db.getSharedToDosID(db.getSessionID(),sortBy,order)[i]+"] " + db.getSharedToDos(db.getSessionID(),sortBy,order)[i]);
                 }
             }
 

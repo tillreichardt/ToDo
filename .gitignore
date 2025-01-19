@@ -27,3 +27,6 @@ config.properties
 
 # Don't ignore .lib folder
 !.lib
+
+# VisualStudioCode
+.vscode

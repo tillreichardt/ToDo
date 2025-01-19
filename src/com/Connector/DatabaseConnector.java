@@ -110,8 +110,8 @@ public class DatabaseConnector {
     public void setSharedConnection(int userID, int toDoID){
         if(findToDoByID(toDoID)==0) return;
         if(findUserByID(userID)==0) return;
-        dbConn.executeStatement("Insert into Shared_ToDo_Users (user_id,todo_id)"+
-                                "Values ("+userID+","+toDoID+")");
+        dbConn.executeStatement("Insert into Shared_ToDo_Users (user_id,todo_id,accepted)"+
+                                "Values ("+userID+","+toDoID+",0)");
     }
 
     public void deleteSharedConnection(int userID, int toDoID){
@@ -237,15 +237,33 @@ public class DatabaseConnector {
         System.out.printf("Deleted ToDo with ID '%d'.%n", toDoID);
     }
     
-
-
-
-
-
-
     
 
+
+
+
+
+
+
     // <---------------- getter methods ---------------->
+    public String getPublicIDFromUserID(int userID){
+        dbConn.executeStatement("select publicID from User where ID = " + userID);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr == null || qr.getRowCount() == 0) return "";
+
+        return qr.getData()[0][0];
+    } 
+
+    public int getUserIDFromPublicID(String publicID){
+        dbConn.executeStatement("select ID from User where publicID = '" + publicID + "'");
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr == null || qr.getRowCount() == 0) return 0;
+
+        return Integer.parseInt(qr.getData()[0][0]);
+    }
+
     public String getNameOfUser(int id){
         dbConn.executeStatement("Select Name from User where ID = "+id);
         QueryResult qr = dbConn.getCurrentQueryResult();
@@ -398,8 +416,11 @@ public class DatabaseConnector {
     }
 
     // reteurns an array with all todos of transferred ownerID
-    public String[] getToDos(int ownerID, String sort, String order){
-        dbConn.executeStatement("select Title from ToDo where OwnerID = " + ownerID + " order by " + sort + " " + order);
+    public String[] getSharedToDos(int userID, String sort, String order){
+        dbConn.executeStatement("SELECT title " +
+                                "FROM ToDo t JOIN Shared_ToDo_Users s ON s.todo_id = t.ID " +
+                                "WHERE s.user_ID = " + userID +
+                                " ORDER BY " + sort + " " + order);
         QueryResult qr = dbConn.getCurrentQueryResult();
 
         if(qr==null || qr.getRowCount() == 0) return new String[0];
@@ -413,11 +434,29 @@ public class DatabaseConnector {
         return result;
     }
 
-    public int[] getToDosID(int ownerID, String sort, String order){
+    public int[] getOwnedToDosID(int ownerID, String sort, String order){
         dbConn.executeStatement("select ID "+
                                 "from ToDo "+
                                 "where OwnerID = " + ownerID +
                                 " order by " + sort + " " + order);
+        QueryResult qr = dbConn.getCurrentQueryResult();
+
+        if(qr==null || qr.getRowCount() == 0) return new int[0];
+
+        int rowCount = qr.getRowCount();
+        int[] result = new int[rowCount];
+        
+        for(int i = 0; i < rowCount; i++){
+            result[i] = Integer.parseInt(qr.getData()[i][0]);
+        }
+        return result;
+    }
+
+    public int[] getSharedToDosID(int userID, String sort, String order){
+        dbConn.executeStatement("SELECT t.ID " +
+                                "FROM ToDo t JOIN Shared_ToDo_Users s ON s.todo_id = t.ID " +
+                                "WHERE s.user_ID = " + userID +
+                                " ORDER BY " + sort + " "+ order);
         QueryResult qr = dbConn.getCurrentQueryResult();
 
         if(qr==null || qr.getRowCount() == 0) return new int[0];
