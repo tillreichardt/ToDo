@@ -74,14 +74,14 @@ Type  of  items  available  for  all  commands: [user, todo,  category]
 
 Commands:
 
-	show  		Show  an  entity  based  on  type
-	create  	Create  a  new  entity  based  on  type
-	delete  	Delete  an  entity  based  on  type
-	update  	Update  an  existing  entity  based  on  type
-	share 		Share a Todo with another user
-	login  		Log  in  to  your  account
-	logout 		Log out of your account
-	help  		Show  this  help  message 
+show  		Show  an  entity  based  on  type
+create  	Create  a  new  entity  based  on  type
+delete  	Delete  an  entity  based  on  type
+update  	Update  an  existing  entity  based  on  type
+share 		Share a Todo with another user
+login  		Log  in  to  your  account
+logout 		Log out of your account
+help  		Show  this  help  message 
 ```
 
 ### ShowCommand
@@ -96,7 +96,7 @@ Display a list of entries or a single entry, possibly sorted.
 **Example:**
 
 ```bash
-todo  show  todo  --sort-by  priority  --order  asc
+todo show todo --sort-by priority --order asc
 ```
 Displays all ToDos, sorted by `priority` in `asc` order.
 ### CreateCommand
@@ -126,7 +126,7 @@ Create a new entity of type `user`, `todo`, or `category`.
 **Example:**
 
 ```bash
-todo  create  user  --username  Max  --password  secret
+todo create user --username Max --password secret
 ```
 Creates a new user named _Max_ with the password _secret_.
 
@@ -147,7 +147,7 @@ Deletes an entity (user, ToDo, or category) by its ID.
 **Example:**
 
 ```bash
-todo  delete  todo  --id  42
+todo delete todo --id 42
 ```
 
 Deletes the ToDo item with ID `42`.
@@ -182,7 +182,7 @@ Updates an existing entity (user, ToDo, or category).
 **Example:**
  
 ```bash
-todo  update  todo  --id  42  --title  newTitle  --priority  0
+todo update todo --id 42 --title newTitle --priority 0
 ```
 Updates the ToDo item with ID `42`, setting the title to _newTitle_ and the priority to _high_ (0).
 
@@ -208,21 +208,21 @@ Shares the ToDo with ID `42` to the User whose publicID is `1a2b3c4`.
 Log in with a username and password.
 
 ```bash
-todo  login  --username  Max  --password  secret
+todo login --username Max --password secret
 ```
 
 ### Logout
 
 If you no longer wish to use the program, log out of your account.
 ```bash
-todo  logout
+todo logout
 ```
 ### Show Help
 
 Displays a help overview of all available commands.
 
 ```bash
-todo  help
+todo help
 ```
 
   
